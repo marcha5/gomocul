@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import sys
 from comunication_protocol import function_obj
 
