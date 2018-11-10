@@ -175,7 +175,7 @@ class Mandatory:
     def turn(self, pos_x, pos_y):
         if not self.board[0]:
             self.board = create_map(self.size)
-        if self.board[pos_x][pos_y] != 0 and pos_x < self.size and pos_y < self.size :
+        if pos_x < self.size and pos_y < self.size and self.board[pos_x][pos_y] != 0:
             print('ERROR - move not allowed !')
             sys.stdout.flush()
         else:
