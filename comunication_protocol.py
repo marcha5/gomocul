@@ -7,12 +7,12 @@ def were_play(danger_column, danger_line, y, x):
     if danger_line > danger_column:
         while oth_x != function_obj.size:
             if function_obj.board[y][oth_x] == 2:
-                if function_obj.board[y][oth_x - 1] == 0 and (oth_x - 1) >= 0:
+                if (oth_x - 1) >= 0 and function_obj.board[y][oth_x - 1] == 0:
                     function_obj.board[y][oth_x - 1] = 1
                     print(str(y) + "," + str(oth_x - 1))
                     sys.stdout.flush()
                     break
-                elif function_obj.board[y][oth_x + 1] == 0 and (oth_x + 1) <= function_obj.size:
+                elif (oth_x + 1) < function_obj.size and function_obj.board[y][oth_x + 1] == 0:
                     function_obj.board[y][oth_x + 1] = 1
                     print(str(y) + "," + str(oth_x + 1))
                     sys.stdout.flush()
@@ -21,12 +21,12 @@ def were_play(danger_column, danger_line, y, x):
     elif danger_column > danger_line:
         while oth_x != function_obj.size:
             if function_obj.board[oth_y][x] == 2:
-                if function_obj.board[oth_y - 1][x] == 0 and (oth_y - 1) >= 0:
+                if (oth_y - 1) >= 0 and function_obj.board[oth_y - 1][x] == 0:
                     function_obj.board[oth_y - 1][x] = 1
                     print(str(oth_y - 1) + "," + str(x))
                     sys.stdout.flush()
                     break
-                elif function_obj.board[oth_y + 1][x] == 0 and (oth_y + 1) <= function_obj.size:
+                elif (oth_y + 1) < function_obj.size and function_obj.board[oth_y + 1][x] == 0:
                     function_obj.board[oth_y + 1][x] = 1
                     print(str(oth_y + 1) + "," + str(x))
                     sys.stdout.flush()
@@ -127,19 +127,19 @@ def ia_algo_fill(board):
             x = 0
             while x != function_obj.size:
                 if function_obj.board[y][x] == 1:
-                    if function_obj.board[y - 1][x] == 0 and (y - 1) >= 0:
+                    if (y - 1) >= 0 and function_obj.board[y - 1][x] == 0:
                         play(y - 1, x)
                         done = True
                         break
-                    if function_obj.board[y + 1][x] == 0 and (y + 1) <= function_obj.size:
+                    if (y + 1) < function_obj.size and function_obj.board[y + 1][x] == 0:
                         play(y + 1, x)
                         done = True
                         break
-                    if function_obj.board[y][x - 1] == 0 and (x - 1) >= 0:
+                    if (x - 1) >= 0 and function_obj.board[y][x - 1] == 0:
                         play(y, x - 1)
                         done = True
                         break
-                    if function_obj.board[y][x + 1] == 0 and (x + 1) <= function_obj.size:
+                    if (x + 1) < function_obj.size and function_obj.board[y][x + 1] == 0:
                         play(y, x + 1)
                         done = True
                         break
