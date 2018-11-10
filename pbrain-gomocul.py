@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 from comunication_protocol import function_obj
 
@@ -17,13 +19,15 @@ def main():
     command = ''
     while command != 'END':
         command = sys.stdin.readline().strip('\r\n').upper()
+        full_command = command
         if ' ' in command:
             command = command.split(' ')
             if command[0] == 'INFO':
                 continue
-            if ',' in command:
-                param_1 = command[1]
-                param_2 = command[2]
+            if ',' in full_command:
+                pos = command[1].split(',')
+                param_1 = pos[0]
+                param_2 = pos[1]
                 if str.isnumeric(param_1) and str.isnumeric(param_2):
                     param_1 = int(param_1)
                     param_2 = int(param_2)
