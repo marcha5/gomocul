@@ -4,16 +4,19 @@ import random, sys
 def were_play(danger_column, danger_line, y, x):
     oth_x = 0
     oth_y = 0
+    hplay = False
     if danger_line > danger_column:
         while oth_x != function_obj.size:
             if function_obj.board[y][oth_x] == 2:
                 if (oth_x - 1) >= 0 and function_obj.board[y][oth_x - 1] == 0:
                     function_obj.board[y][oth_x - 1] = 1
+                    hplay = True
                     print(str(y) + "," + str(oth_x - 1))
                     sys.stdout.flush()
                     break
                 elif (oth_x + 1) < function_obj.size and function_obj.board[y][oth_x + 1] == 0:
                     function_obj.board[y][oth_x + 1] = 1
+                    hplay = True
                     print(str(y) + "," + str(oth_x + 1))
                     sys.stdout.flush()
                     break
@@ -23,34 +26,24 @@ def were_play(danger_column, danger_line, y, x):
             if function_obj.board[oth_y][x] == 2:
                 if (oth_y - 1) >= 0 and function_obj.board[oth_y - 1][x] == 0:
                     function_obj.board[oth_y - 1][x] = 1
+                    hplay = True
                     print(str(oth_y - 1) + "," + str(x))
                     sys.stdout.flush()
                     break
                 elif (oth_y + 1) < function_obj.size and function_obj.board[oth_y + 1][x] == 0:
                     function_obj.board[oth_y + 1][x] = 1
+                    hplay = True
                     print(str(oth_y + 1) + "," + str(x))
                     sys.stdout.flush()
                     break
             oth_y += 1
-    else:
-        done = False
-        a = 0
-        while done == False:
-            while a != function_obj.size:
-                b = 0
-                while b != function_obj.size:
-                    if function_obj.board[a][b] == 0:
-                        function_obj.board[a][b] = 1
-                        print(str(a) + "," + str(b))
-                        sys.stdout.flush()
-                        done = True
-                        break
-                    b += 1
-                a += 1
+    if hplay == False:
+        ia_algo_fill(function_obj.board)
 
 
 def ia_algo_def(board):
     danger = 0
+    nbsymb = 0
     value_dangerous_line = 0
     line_danger = 0
     value_dangerous_column = 0
@@ -62,12 +55,14 @@ def ia_algo_def(board):
     while y != function_obj.size:
         x = 0
         while x != function_obj.size:
-            if board[y][x] == 2:
+            if function_obj.board[y][x] == 2:
                 danger += 1
-            if board[y][x] == 1:
+                nbsymb += 1
+            if function_obj.board[y][x] == 1:
                 danger -= 1
+                nbsymb += 1
             x += 1
-            if danger >= value_dangerous_line:
+            if nbsymb < function_obj.size - 1 and danger >= value_dangerous_line:
                 value_dangerous_line = danger
                 line_danger = y
         danger = 0
@@ -75,27 +70,32 @@ def ia_algo_def(board):
     x = 0
     y = 0
     danger = 0
+    nbsymb = 0
     ## COLUMN
     while x != function_obj.size:
         y = 0
         while y != function_obj.size:
-            if board[y][x] == 2:
+            if function_obj.board[y][x] == 2:
                 danger += 1
-            if board[y][x] == 1:
+                nbsymb += 1
+            if function_obj.board[y][x] == 1:
                 danger -= 1
+                nbsymb += 1
             y += 1
-            if danger > value_dangerous_column:
+            if nbsymb < function_obj.size - 1 and danger > value_dangerous_column:
                 value_dangerous_column = danger
                 column_danger = x
         danger = 0
         x += 1
-    if value_dangerous_column >= 3 or value_dangerous_line >= 3:
+    if value_dangerous_column >= 2 or value_dangerous_line >= 2:
         were_play(value_dangerous_column, value_dangerous_line, line_danger, column_danger)
     else:
-        ia_algo_fill(board)
+        ia_algo_fill(function_obj.board)
 
 
 def play(y, x):
+    if function_obj.board[y][x] != 0:
+        play((random.randint(0, function_obj.size - 2)), (random.randint(0, function_obj.size - 2)))
     function_obj.board[y][x] = 1
     print(str(y) + "," + str(x))
     sys.stdout.flush()
@@ -118,9 +118,10 @@ def search_board():
 def ia_algo_fill(board):
     y = 0
     done = False
+    hplay = False
     something_board = search_board()
     if something_board == False:
-        play((random.randint(0, function_obj.size)), (random.randint(0, function_obj.size)))
+        play((random.randint(0, function_obj.size - 2)), (random.randint(0, function_obj.size - 2)))
         done = True
     while done == False:
         while y != function_obj.size:
@@ -128,18 +129,22 @@ def ia_algo_fill(board):
             while x != function_obj.size:
                 if function_obj.board[y][x] == 1:
                     if (y - 1) >= 0 and function_obj.board[y - 1][x] == 0:
+                        hplay = True
                         play(y - 1, x)
                         done = True
                         break
                     if (y + 1) < function_obj.size and function_obj.board[y + 1][x] == 0:
+                        hplay = True
                         play(y + 1, x)
                         done = True
                         break
                     if (x - 1) >= 0 and function_obj.board[y][x - 1] == 0:
+                        hplay = True
                         play(y, x - 1)
                         done = True
                         break
                     if (x + 1) < function_obj.size and function_obj.board[y][x + 1] == 0:
+                        hplay = True
                         play(y, x + 1)
                         done = True
                         break
@@ -147,7 +152,6 @@ def ia_algo_fill(board):
             if done == True:
                 break
             y += 1
-
 
 def create_map(size):
     board = [[0 for x in range(size)] for x in range(size)]
